@@ -14,7 +14,7 @@ func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}
 	var {{.Ret.Name}} {{.Ret.Type}}
 	{{- end}}
 	err := row.Scan({{.Ret.Scan}})
-{{- if $.EmitNilRecords}}
+{{- if and $.EmitNilRecords .Ret.IsStruct }}
     if err != nil && errors.Is(err, sql.ErrNoRows) {
         return nil, nil
     }
