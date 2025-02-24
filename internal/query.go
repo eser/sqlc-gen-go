@@ -112,7 +112,7 @@ func (v QueryValue) TypeName() string {
 
 func (v *QueryValue) DefineType() string {
 	t := v.Type()
-	if v.IsPointer() {
+	if v.IsPointer() && !strings.HasPrefix(t, "[]") {
 		return "*" + t
 	}
 	return t
