@@ -406,9 +406,15 @@ func (i *importer) queryImports(filename string) fileImports {
 		return false
 	}
 
+	// Search for :one queries
 	if i.Options.EmitNilRecords {
-		std["database/sql"] = struct{}{}
-		std["errors"] = struct{}{}
+		for _, q := range gq {
+			if q.Cmd == ":one" {
+				std["errors"] = struct{}{}
+				std["database/sql"] = struct{}{}
+				break
+			}
+		}
 	}
 
 	if anyNonCopyFrom {
