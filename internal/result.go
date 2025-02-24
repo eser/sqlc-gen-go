@@ -246,7 +246,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, structs []
 				Typ:            goType(req, options, p.Column),
 				SQLDriver:      sqlpkg,
 				Column:         p.Column,
-				EmitNilRecords: options.EmitNilRecords,
+				EmitNilRecords: false,
 			}
 		} else if len(query.Params) >= 1 {
 			var cols []goColumn
@@ -269,7 +269,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, structs []
 				Struct:         s,
 				SQLDriver:      sqlpkg,
 				EmitPointer:    options.EmitParamsStructPointers,
-				EmitNilRecords: options.EmitNilRecords,
+				EmitNilRecords: false,
 			}
 
 			// if query params is 2, and query params limit is 4 AND this is a copyfrom, we still want to emit the query's model
