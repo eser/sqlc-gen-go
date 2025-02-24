@@ -10,14 +10,14 @@ import (
 )
 
 type QueryValue struct {
-	Emit           bool
-	EmitPointer    bool
-	EmitNilRecords bool
-	Name           string
-	DBName         string // The name of the field in the database. Only set if Struct==nil.
-	Struct         *Struct
-	Typ            string
-	SQLDriver      opts.SQLDriver
+	Emit                     bool
+	EmitPointer              bool
+	EmitPointerForNonStructs bool
+	Name                     string
+	DBName                   string // The name of the field in the database. Only set if Struct==nil.
+	Struct                   *Struct
+	Typ                      string
+	SQLDriver                opts.SQLDriver
 
 	// Column is kept so late in the generation process around to differentiate
 	// between mysql slices and pg arrays
@@ -33,7 +33,7 @@ func (v QueryValue) IsStruct() bool {
 }
 
 func (v QueryValue) IsPointer() bool {
-	return v.EmitNilRecords || (v.EmitPointer && v.Struct != nil)
+	return v.EmitPointerForNonStructs || (v.EmitPointer && v.Struct != nil)
 }
 
 func (v QueryValue) isEmpty() bool {

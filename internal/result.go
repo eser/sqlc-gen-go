@@ -241,12 +241,11 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, structs []
 		if len(query.Params) == 1 && qpl != 0 {
 			p := query.Params[0]
 			gq.Arg = QueryValue{
-				Name:           escape(paramName(p)),
-				DBName:         p.Column.GetName(),
-				Typ:            goType(req, options, p.Column),
-				SQLDriver:      sqlpkg,
-				Column:         p.Column,
-				EmitNilRecords: false,
+				Name:      escape(paramName(p)),
+				DBName:    p.Column.GetName(),
+				Typ:       goType(req, options, p.Column),
+				SQLDriver: sqlpkg,
+				Column:    p.Column,
 			}
 		} else if len(query.Params) >= 1 {
 			var cols []goColumn
@@ -264,12 +263,11 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, structs []
 				return nil, err
 			}
 			gq.Arg = QueryValue{
-				Emit:           true,
-				Name:           "arg",
-				Struct:         s,
-				SQLDriver:      sqlpkg,
-				EmitPointer:    options.EmitParamsStructPointers,
-				EmitNilRecords: false,
+				Emit:        true,
+				Name:        "arg",
+				Struct:      s,
+				SQLDriver:   sqlpkg,
+				EmitPointer: options.EmitParamsStructPointers,
 			}
 
 			// if query params is 2, and query params limit is 4 AND this is a copyfrom, we still want to emit the query's model
@@ -284,11 +282,11 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, structs []
 			name := columnName(c, 0)
 			name = strings.Replace(name, "$", "_", -1)
 			gq.Ret = QueryValue{
-				Name:           escape(name),
-				DBName:         name,
-				Typ:            goType(req, options, c),
-				SQLDriver:      sqlpkg,
-				EmitNilRecords: options.EmitNilRecords,
+				Name:                     escape(name),
+				DBName:                   name,
+				Typ:                      goType(req, options, c),
+				SQLDriver:                sqlpkg,
+				EmitPointerForNonStructs: options.EmitNilRecords,
 			}
 		} else if putOutColumns(query) {
 			var gs *Struct
@@ -334,12 +332,12 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, structs []
 				emit = true
 			}
 			gq.Ret = QueryValue{
-				Emit:           emit,
-				Name:           "i",
-				Struct:         gs,
-				SQLDriver:      sqlpkg,
-				EmitPointer:    options.EmitResultStructPointers,
-				EmitNilRecords: options.EmitNilRecords,
+				Emit:                     emit,
+				Name:                     "i",
+				Struct:                   gs,
+				SQLDriver:                sqlpkg,
+				EmitPointer:              options.EmitResultStructPointers,
+				EmitPointerForNonStructs: options.EmitNilRecords,
 			}
 		}
 
